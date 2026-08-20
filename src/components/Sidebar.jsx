@@ -1,8 +1,11 @@
+import logo from '../../images/cresome_logo.svg';
+
 export default function Sidebar({ items, onSelect }) {
   return (
     <aside className="sidebar">
       <div className="brand">
-        <img src="./images/cresome_logo.svg" alt="cresome" />
+        <img src={logo} alt="cresome" />
+        <div className="brand-name">クリサム株式会社</div>
       </div>
 
       <nav className="nav">

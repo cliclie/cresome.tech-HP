@@ -21,7 +21,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--navy);
-  font-family: 'Zen Kaku Gothic Antique', sans-serif;
+  font-family: 'Zen Maru Gothic', sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -40,6 +40,14 @@ body {
   background: var(--bg);
 }
 .brand img { height: 27px; width: auto; display: block; }
+.brand-name {
+  width: 100%;
+  margin-top: 8px;
+  text-align: right;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  color: var(--navy);
+}
 
 .nav {
   display: flex;
@@ -197,14 +205,13 @@ body {
   transform: translateY(22px);
   transition: opacity 0.75s ease, transform 0.75s var(--ease-out-soft);
   will-change: opacity, transform;
-  text-indent: 1em;
 }
 .reveal.in { opacity: 1; transform: none; }
 
 /* ---------- Typography ---------- */
 .hero-title {
   margin: 26px 0 0;
-  font-weight: 300;
+  font-weight: 400;
   word-break: auto-phrase;
   font-size: clamp(26px, 4vw, 40px);
   line-height: 1.4;
@@ -227,13 +234,12 @@ body {
   margin: 26px 0 0;
   font-size: 17px;
   line-height: 1.6;
-  color: var(--muted);
+  color: var(--navy);
   word-break: auto-phrase;
 }
 .lead + .lead { margin-top: 26px; }
 .lead-group {
   margin: 26px 0 0;
-  max-width: 580px;
 }
 .lead-group .lead { margin-top: 0; }
 .lead-group .lead + .lead { margin-top: 26px; }
@@ -250,7 +256,7 @@ body {
   align-items: baseline;
   gap: 12px;
   font-size: 15px;
-  color: var(--muted);
+  color: var(--navy);
   letter-spacing: 0.05em;
 }
 .feature::before {
@@ -301,7 +307,7 @@ body {
   margin: 0;
   font-size: 14.5px;
   line-height: 1.95;
-  color: var(--muted);
+  color: var(--navy);
   word-break: auto-phrase;
 }
 
@@ -348,7 +354,7 @@ body {
   max-width: none;
   font-size: 14.5px;
   line-height: 1.95;
-  color: var(--muted);
+  color: var(--navy);
   word-break: auto-phrase;
 }
 
