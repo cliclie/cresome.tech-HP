@@ -7,7 +7,7 @@ export default function Home() {
 
       <div className="lead-group reveal">
         <p className="lead">
-          UI/UXデザインからAI/LLM連携開発まで、アイデアを製品へとつなげることをお手伝します。
+          UI/UXデザインからAI/LLM連携開発まで、アイデアを製品へとつなげることをお手伝いします。
         </p>
         <p className="lead">お持ちの想いを、一緒にカタチにしていきましょう。</p>
       </div>
