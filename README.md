@@ -93,3 +93,8 @@ publish ブランチには以下のファイルのみ存在します:
   4. 旧来の「リポジトリ直下展開 + `.backup/` 退避」機構と `npm run restore` を廃止（ソース用 `index.html` が公開版で上書きされる問題自体がなくなるため）
   5. `vite.config.js` に `root` を realpath 固定する設定を追加（シンボリックリンク（ジョクション）越しのワークスペースで `npm run build` が「fileName must be neither absolute nor relative paths」エラーで失敗する問題を回避）
 
+- **変更後の検証（実施済み）**:
+  1. [https://github.com/cliclie/cresome.tech-HP/settings/pages](https://github.com/cliclie/cresome.tech-HP/settings/pages) を開く
+  2. **Source: Deploy from a branch** を選択し、Branch を **`publish`**、フォルダを **`/ (root)`** に変更して保存
+  3. 数分待って [https://www.cresome.tech/](https://www.cresome.tech/) でサイト表示を確認
+  4. [https://www.cresome.tech/README.md](https://www.cresome.tech/README.md) が **404** になることを確認
