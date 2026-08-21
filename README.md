@@ -20,24 +20,26 @@ npm run preview    # ビルド結果をプレビュー
 
 ## デプロイ（GitHub Pages）
 
-リポジトリの **main ブランチ直下** に公開ファイルを展開して公開しています
-（リポジトリ設定: Pages → Source: Deploy from branch → main / /）。
+**main ブランチはソース専用**として扱い、公開ファイルだけを **`publish` ブランチ**
+に置き、それを GitHub Pages から配信しています
+（リポジトリ設定: Pages → Source: Deploy from branch → **publish / /**）。
+
+この構成により、https://www.cresome.tech/ から README.md・ソースコード等を
+直接参照することはできません。
 
 ```bash
-npm run deploy     # restore → build → 公開ファイルをリポジトリ直下へ展開
+npm run deploy     # build → 公開ファイル（index.html + assets/ + CNAME）を publish ブランチへ更新・push
 ```
 
-展開内容:
-- `dist/assets/` → `./assets/`（直前の古い `assets/` は削除されます）
-- `dist/index.html` → `./index.html`（上書き）
-- 上書き前のソース用 `index.html` は `.backup/index.src.html` に退避されます
-  （`index.html` が既に公開版に置き換わっている場合は退避をスキップします）
+`npm run deploy` の内部処理（`scripts/deploy.mjs`）:
+1. `npm run build` で `dist/` を生成
+2. `publish` ブランチの git worktree（リポジトリ隣接の `<repo>-publish-wt`）を確保
+3. worktree 内の全ファイルを削除し、`dist/*` と `CNAME` を配置
+4. 変更があれば commit → `git push origin publish`
 
-公開後に開発を再開する場合は:
-
-```bash
-npm run restore    # ソース用の index.html を .backup から復元
-```
+publish ブランチには以下のファイルのみ存在します:
+- `index.html`
+- `assets/`（JS / CSS / logo / favicon）
 
 ## 留意事項: アセットファイル名のビルド再現性
 
@@ -45,8 +47,8 @@ npm run restore    # ソース用の index.html を .backup から復元
 - Vite（および同梱の esbuild）のバージョンが異なると、**ソースコードを変更していてもいないなくても**、ビルド成果物の内容ハッシュが変わることがあります。例:
   - `assets/index-CsZMAxLG.js` → `assets/index-DAFwLBMo.js`
   - `assets/cresome_logo-CqxN7NRr.svg` → `assets/cresome_logo-CqxN7NRr-CqxN7NRr.svg`（アセット名に二重ハッシュ）
-- 動作自体には影響しません。`npm run deploy` は古い `assets/` を削除してから新しいビルド成果物をコピーするため、そのままコミットして公開すれば問題ありません。
-- ただし、デプロイ後にリポジトリにコミットされる `assets/*` のファイル名が前回のものと異なる場合がありますので、差分がファイル名の変化中心である場合は上記の理由によるものとご判断ください。
+- 動作自体には影響しません。`npm run deploy` は publish worktree を全削除してから新しいビルド成果物を配置するため、そのまま push して公開すれば問題ありません。
+- ただし、デプロイ後に publish ブランチへ反映される `assets/*` のファイル名が前回のものと異なる場合がありますので、差分がファイル名の変化中心である場合は上記の理由によるものとご判断ください。
 - 前回デプロイ時と同一の Vite バージョンでビルドしたい場合は、該当コミットの `package.json` / `package-lock.json` を復元して `npm ci` を実行してください。
 
 ## サイト構成
@@ -80,4 +82,14 @@ npm run restore    # ソース用の index.html を .backup から復元
 あわせて `vite.config.js` のコメントに `scripts/deploy-root.mjs` と誤記があったため `scripts/deploy.mjs` に修正しました。
 
 - 本変更はドキュメント・コメントのみでソースコードを変更していないため、再ビルド（`npm run deploy`）は行いませんでした
+
+### 2026-08-22: GitHub Pages 公開構成を publish ブランチ方式に変更
+
+- **背景**: 旧構成は main ブランチ直下を公開していたため、https://www.cresome.tech/README.md やソースコード（`src/`・`package.json` 等）をブラウザから直接閲覧できてしまう問題があった。
+- **変更内容**:
+  1. 専用公開ブランチ `publish` を作成（`index.html` / `assets/` / `CNAME` のみを含む）
+  2. GitHub Pages の配信元を `publish / /` に変更（リポジトリ設定: Settings → Pages）
+  3. `scripts/deploy.mjs` を書き換え: build 後、`publish` ブランチの git worktree（リポジトリ隣接の `<repo>-publish-wt`）に公開ファイルだけを配置し commit + push
+  4. 旧来の「リポジトリ直下展開 + `.backup/` 退避」機構と `npm run restore` を廃止（ソース用 `index.html` が公開版で上書きされる問題自体がなくなるため）
+  5. `vite.config.js` に `root` を realpath 固定する設定を追加（シンボリックリンク（ジョクション）越しのワークスペースで `npm run build` が「fileName must be neither absolute nor relative paths」エラーで失敗する問題を回避）
 

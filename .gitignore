@@ -1,11 +1,8 @@
 # 依存関係
 node_modules/
 
-# ビルド中間成果物（最終成果物はリポジトリ直下の index.html + assets/ に配置）
+# ビルド成果物（deploy 時に publish ブランチへコピー・公開）
 dist/
-
-# deploy 時の退避先
-.backup/
 
 # 環境・IDE
 .env
